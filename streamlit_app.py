@@ -28,9 +28,14 @@ svi_data['COUNTY'] = svi_data['COUNTY'].str.replace(r'\s*County', '', regex=True
 st.set_page_config(layout="wide")
 # Customize page title
 st.title("Social Vulnerability Index: Map of Florida")
-markdown = """
+st.markdown("Data Source: CDC/ATSDR & FGIO")
+st.markdown("Social vulnerablity refers to the demographic and socioeconomic factors that contribute to communities being more adversely affected by public heath emergencies and other external hazards and stressors that cuase disease and injury.")
+
+st.write("")  # Adds a blank line
+
+markdown = ("""
 GitHub Repository: <https://github.com/EvelynXu12321/SNOWFLAKE>
-"""
+""")
 
 st.sidebar.title("Filters")
 st.sidebar.info(markdown)
@@ -78,7 +83,7 @@ m = folium.Map(location=[27.5, -82], zoom_start=6)
 # Create the choropleth layer
 choropleth = folium.Choropleth(
     geo_data=florida_geojson,
-    name='choropleth',
+    name=selected_option,
     data=svi_data,
     columns=['COUNTY', column_name],
     key_on='feature.properties.NAME',
@@ -88,9 +93,32 @@ choropleth = folium.Choropleth(
     legend_name=f'{selected_option} Rate'
 ).add_to(m)
 
-# Add Layer Control
-folium.LayerControl().add_to(m)
+
+for feature in florida_geojson['features']:
+    # Access properties and geometry directly
+    county_name = feature['properties']['NAME']
+    population = feature['properties']['POPULATION']
+
+    spl_value = svi_data.loc[svi_data['COUNTY'] == county_name, column_name].values
+    spl_value_text = f"{selected_option}: {spl_value[0]}" if len(spl_value) > 0 else f"{selected_option}: N/A"
+
+    folium.GeoJson(
+        feature['geometry'],
+        line_opacity=0,
+        tooltip=folium.Tooltip(f"County: {county_name}<br>Population: {population}<br>{spl_value_text}"),
+        style_function=lambda x: {'color': 'transparent'}  # Set border color to transparent this is my code now, update ur code 
+    ).add_to(m)
+
+
+# # Add Layer Control
+# folium.LayerControl().add_to(m)
 
 # Display the map in Streamlit
 st.write(f"Choropleth Map for {selected_option}")
 st_folium(m, width=700, height=500)
+
+#st.caption("SVI provides specific socially and spatially relevant information to help public health officials and local planners better prepare communities to respond to emergency events such as severe weather, floods, disease outbreaks, or chemical exposure.")
+
+
+##TODO
+#state comparoison and country comparison
