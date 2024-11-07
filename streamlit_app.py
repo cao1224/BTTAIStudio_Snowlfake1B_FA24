@@ -51,7 +51,8 @@ st.sidebar.title("Filters")
 # Dropdown to select between County and State data
 dataset_option = st.sidebar.selectbox(
     "Select a Comparison Scope:",
-    ["Country-wide", "State-wide"]
+    ["Select an option", "Country-wide", "State-wide"],
+    index=0
 )
 
 
@@ -76,7 +77,8 @@ color_map = {
 # Create a dropdown in the sidebar to select a single layer to display
 selected_option = st.sidebar.selectbox(
     "Select a Theme:",
-    list(column_map.keys())
+    ["Select an option"] + list(column_map.keys()),
+    index=0
 ).strip()
 
 st.sidebar.write("")  # Adds a blank line
@@ -86,55 +88,55 @@ st.sidebar.write("")  # Add more blank lines if needed
 logo = "https://imgur.com/Nc2lPGT.png"
 st.sidebar.image(logo)
 
-# Set the dataset based on selection
-if dataset_option == "County-level Data":
-    svi_data = svi_county_data
-else:
-    svi_data = svi_state_data
-
-# Map the selected display name to the actual column name and color
-column_name = column_map[selected_option]
-color = color_map[selected_option]
-
-# Create the map with Folium
+# Initialize the map with a default view
 m = folium.Map(location=[27.5, -82], zoom_start=6)
 
-# Create the choropleth layer
-choropleth = folium.Choropleth(
-    geo_data=florida_geojson,
-    name=selected_option,
-    data=svi_data,
-    columns=['COUNTY', column_name],
-    key_on='feature.properties.NAME',
-    fill_color=color,
-    fill_opacity=0.7,
-    line_opacity=0.2,
-    legend_name=f'{selected_option} Rate'
-).add_to(m)
+# Check if both dropdowns have valid selections
+if dataset_option != "Select an option" and selected_option != "Select an option":
+    # Set the dataset based on selection
+    if dataset_option == "County-level Data":
+        svi_data = svi_county_data
+    else:
+        svi_data = svi_state_data
 
+    # Map the selected display name to the actual column name and color
+    column_name = column_map[selected_option]
+    color = color_map[selected_option]
 
-for feature in florida_geojson['features']:
-    # Access properties and geometry directly
-    county_name = feature['properties']['NAME']
-    population = feature['properties']['POPULATION']
-
-    spl_value = svi_data.loc[svi_data['COUNTY'] == county_name, column_name].values
-    spl_value_text = f"{selected_option}: {spl_value[0]}" if len(spl_value) > 0 else f"{selected_option}: N/A"
-
-    folium.GeoJson(
-        feature['geometry'],
-        line_opacity=0,
-        tooltip=folium.Tooltip(f"County: {county_name}<br>Population: {population}<br>{spl_value_text}"),
-        style_function=lambda x: {'color': 'transparent'}  # Set border color to transparent this is my code now, update ur code 
+    # Create the choropleth layer
+    choropleth = folium.Choropleth(
+        geo_data=florida_geojson,
+        name=selected_option,
+        data=svi_data,
+        columns=['COUNTY', column_name],
+        key_on='feature.properties.NAME',
+        fill_color=color,
+        fill_opacity=0.7,
+        line_opacity=0.2,
+        legend_name=f'{selected_option} Rate'
     ).add_to(m)
 
+    # Add tooltips
+    for feature in florida_geojson['features']:
+        county_name = feature['properties']['NAME']
+        population = feature['properties']['POPULATION']
+        
+        spl_value = svi_data.loc[svi_data['COUNTY'] == county_name, column_name].values
+        spl_value_text = f"{selected_option}: {spl_value[0]}" if len(spl_value) > 0 else f"{selected_option}: N/A"
 
-# # Add Layer Control
-# folium.LayerControl().add_to(m)
+        folium.GeoJson(
+            feature['geometry'],
+            line_opacity=0,
+            tooltip=folium.Tooltip(f"County: {county_name}<br>Population: {population}<br>{spl_value_text}"),
+            style_function=lambda x: {'color': 'transparent'}
+        ).add_to(m)
+
+else:
+    st.write("")
+    st.write("Please select both scope and theme to view the map.")
 
 # Display the map in Streamlit
-st.write("")
-st.write(f"Choropleth Map for {selected_option}")
+st.write(f"Choropleth Map for {selected_option} ({dataset_option})"if dataset_option != "Select an option" and selected_option != "Select an option" else "")
 st_folium(m, width=700, height=500)
 
 # Additional FAQ content
