@@ -44,7 +44,17 @@ While hurricanes are unavoidable, their impacts can be mitigated by addressing s
    ```
 
 ## Usage
-
+1. Use the sidebar filter on the left to:
+   -  Select variables to display on the map.
+   -  View colored markers representing critical facilities and their hurricane risk severity.
+   -  See hurricane paths as colored lines, with key events marked as red dots.
+2. Enter an address to receive a personalized risk score:
+   - The score is calculated using our custom machine learning algorithm.
+   - It incorporates geospatial insights such as proximity to hurricane paths and frequency of hurricane intersections.
+   - It also includes social insights from the Social Vulnerability Index (SVI).
+3. Use the tooltips for detailed information:
+   - Hover over a hurricane path to see metrics like the hurricane’s name, type of sequential disaster, wind speed, and pressure.
+   - Hover over a critical facility to view its name, type, and calculated risk score.
 
 ## Data Preparation and Validation
 
