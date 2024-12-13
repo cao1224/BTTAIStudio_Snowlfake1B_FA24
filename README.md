@@ -15,7 +15,7 @@
 
 
 ## Project Overview
-...
+Hurricanes, such as Helene and Milton in Florida, have shown how devastating these natural disasters can be for coastal communities. Damaged infrastructure, flooded buildings, and limited access to essential services like healthcare, clean water, and food pose significant challenges during and after hurricanes. Vulnerable populations face long-term consequences, including economic losses, mental health struggles, and prolonged displacement. Social, cultural, economic, and geographic barriers further exacerbate healthcare delivery and access disparities, leaving these communities even more vulnerable.
 
 ## Objectives
 ...
