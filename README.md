@@ -44,15 +44,23 @@ While hurricanes are unavoidable, their impacts can be mitigated by addressing s
    ```
 
 ## Usage
-1. Use the sidebar filter on the left to:
+
+<img src="/figures/usage.png" alt="Alt text" width="700">
+<p><em>Figure 1: Sidebar filter and address input interface</em></p>
+
+<img src="/figures/usage_2.png" alt="Alt text" width="700">
+<p><em>Figure 2: Tooltip functionality for hurricane paths and critical facilities</em></p>
+
+
+1. Use the sidebar filter on the left (refer to Figure 1) to:
    -  Select variables to display on the map.
    -  View colored markers representing critical facilities and their hurricane risk severity.
    -  See hurricane paths as colored lines, with key events marked as red dots.
-2. Enter an address to receive a personalized risk score:
+2. Enter an address to receive a personalized risk score (refer to Figure 1):
    - The score is calculated using our custom machine learning algorithm.
    - It incorporates geospatial insights such as proximity to hurricane paths and frequency of hurricane intersections.
    - It also includes social insights from the Social Vulnerability Index (SVI).
-3. Use the tooltips for detailed information:
+3. Use the tooltips for detailed information (refer to Figure 2):
    - Hover over a hurricane path to see metrics like the hurricane’s name, type of sequential disaster, wind speed, and pressure.
    - Hover over a critical facility to view its name, type, and calculated risk score.
 
@@ -77,12 +85,12 @@ The purpose of EDA in our project was to uncover relationships within the Divers
 While we created many visualizations during the process, two stood out as the most meaningful for our analysis.
 
 <img src="/figures/figure_1.png" alt="Alt text" width="400">
-<p><em>Figure 1: Income, Healthcare Access, and Housing Affordability</em></p>
+<p><em>Figure 3: Income, Healthcare Access, and Housing Affordability</em></p>
 
 This visualization examines the relationship between median household income, healthcare access (measured by the uninsured rate), and housing affordability in Florida. It highlights an inverse relationship between income and the uninsured rate, where higher-income areas typically have fewer uninsured individuals. Additionally, there is a strong link between rent burden and healthcare access; areas with higher percentages of households spending more than 30% of their income on rent tend to have higher uninsured rates. Since we have geospatial data in the dataset, we can identify areas where low-income households face high uninsured rates and significant rent burdens, which allows us to pinpoint communities that may be particularly vulnerable to healthcare disruptions during a hurricane.
 
 <img src="/figures/figure_2.png" alt="Alt text" width="400">
-<p><em>Figure 2: Public Health Insurance Coverage Distribution</em></p>
+<p><em>Figure 4: Public Health Insurance Coverage Distribution</em></p>
 
 This visualization compares the distribution of public health insurance types in Florida. Medicaid coverage stands out with the highest median and widest range, indicating it supports a larger portion of the population. In contrast, the “other public insurance” category shows the lowest median and range, reflecting more limited coverage. TRICARE/VA Only and Medicare Only have lower, more consistent median values, indicating less limited accessibly among the broader population. 
 
