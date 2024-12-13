@@ -137,7 +137,37 @@ Both models were trained using supervised learning techniques on datasets such a
 
 
 ## Key Findings and Insights
-...
+
+<p align="center">
+  <img src="/figures/residual_1.png" alt="First Model's Residual Analysis" width="400">
+  <img src="/figures/residual_2.png" alt="Second Model's Residual Analysis" width="400">
+</p>
+<p align="center">
+  <em>Figure 5: First Model's Residual Analysis &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp; Figure 6: Second Model's Residual Analysis</em>
+</p>
+
+### First Model: Performance and Insights
+- **Mean Squared Error (MSE)**: The model achieved a low MSE of 0.006, indicating that on average, predictions were close to actual values. This highlights the model’s ability to make accurate predictions overall.
+- **R-squared Score**: The model explained 20% of the variation in the data, which shows that while it provides some explanation for the outcomes, there is substantial variability that remains unaccounted for.
+- **Residual Analysis** (Refer to Figure 5):
+   - The residuals were mostly small and close to zero, consistent with the low MSE, confirming general accuracy in predictions.
+   - However, residuals showed some patterns, particularly at higher predicted values where they tended to spread out more. This suggests the model struggles with variability in this range, limiting the R-squared score.
+- **Future Improvements**: Additional feature engineering and expanding the dataset would likely enhance the model’s ability to capture variability and improve overall performance.
+
+### Second Model: Refinement and Performance
+#### Random Forest Model
+- The training RMSE of 1.86 showed good model fit, but testing RMSE increased to 3.22, reflecting potential overfitting.
+- Cross-validation RMSE values ranged from 0.63 to 5.43 in earlier iterations, stabilizing at 1.73 with refinements, indicating improved consistency.
+
+#### Gradient Boosted Decision Tree (GBDT)
+- The model achieved a low test RMSE of 0.37 (log-transformed), demonstrating strong prediction accuracy.
+- Adjusted MAPE of 20.61% further confirmed reasonable performance with log-transformed data.
+- **Residual Analysis** (Refer to Figure 6):
+   - Residuals were scattered evenly around zero, with smaller residuals for higher true values, indicating consistency in predictions.
+   - The histogram of residuals showed a strong peak near zero, confirming accuracy for most predictions.
+   - The predicted vs. true values plot showed points closely aligning with the red line, suggesting robust agreement between predictions and actual values.
+- Minor areas for improvement included slight asymmetry in residuals and occasional scatter, indicating opportunities for better handling of specific cases.
+
 
 ## Acknowledgements
 
