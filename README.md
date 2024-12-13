@@ -44,7 +44,7 @@ While hurricanes are unavoidable, their impacts can be mitigated by addressing s
    ```
 
 ## Usage
-...
+
 
 ## Data Preparation and Validation
 
@@ -62,13 +62,26 @@ Our project utilized a range of datasets to assess and mitigate risks, each prov
 **Hurricane Paths (HURDAT2)**: Historical hurricane path data from the National Hurricane Center was processed from text files into a usable format, including detailed updates every six hours. These data points allowed us to map precise hurricane paths, which were integrated into the interactive tool to visualize historical patterns and inform preparedness.
 
 ### EDA (EXPLORATORY DATA ANALYSIS)
+The purpose of EDA in our project was to uncover relationships within the Diversity, Equity, and Inclusion dataset, focusing on how socioeconomic factors influence community outcomes. We began by summarizing the key variables, checking for missing data, and resolving inconsistencies to ensure reliable analysis. To explore the data, we used visualization like scatter plots, box plots, and histograms, which provided insights into individual variables and their interrelationships.
+
+While we created many visualizations during the process, two stood out as the most meaningful for our analysis.
+
+<img src="/figures/figure_1.png" alt="Alt text" width="400">
+<p><em>Figure 1: Income, Healthcare Access, and Housing Affordability</em></p>
+
+This visualization examines the relationship between median household income, healthcare access (measured by the uninsured rate), and housing affordability in Florida. It highlights an inverse relationship between income and the uninsured rate, where higher-income areas typically have fewer uninsured individuals. Additionally, there is a strong link between rent burden and healthcare access; areas with higher percentages of households spending more than 30% of their income on rent tend to have higher uninsured rates. Since we have geospatial data in the dataset, we can identify areas where low-income households face high uninsured rates and significant rent burdens, which allows us to pinpoint communities that may be particularly vulnerable to healthcare disruptions during a hurricane.
+
+<img src="/figures/figure_2.png" alt="Alt text" width="400">
+<p><em>Figure 2: Public Health Insurance Coverage Distribution</em></p>
+
+This visualization compares the distribution of public health insurance types in Florida. Medicaid coverage stands out with the highest median and widest range, indicating it supports a larger portion of the population. In contrast, the “other public insurance” category shows the lowest median and range, reflecting more limited coverage. TRICARE/VA Only and Medicare Only have lower, more consistent median values, indicating less limited accessibly among the broader population. 
+
+Understanding the distribution of public health insurance types helps the AI tools assess which communities have stronger healthcare support networks. These insights can guide decisions on resources allocation and preparedness, ensuring healthcare needs are met during and after a hurricane.
 
 
 ### FEATURE SELECTION
 
-**First Model (Web-Interactive Tool)**
-
-The first model focuses on predicting a precomputed risk score for each building in Florida, considering its vulnerability to hurricanes. Feature engineering was a key step in ensuring the model captured meaningful patterns in data.
+**First Model (Web-Interactive Tool)**: The first model focuses on predicting a precomputed risk score for each building in Florida, considering its vulnerability to hurricanes. Feature engineering was a key step in ensuring the model captured meaningful patterns in data.
 
 **Features Engineered**:
 1. **Proximity to Coastline**: Using Florida's coastline shapefiles, we calculated the minimum distance from each location to the coast. This metric reflects the likelihood of a building being impacted by storm surges and coastal flooding.
@@ -77,9 +90,7 @@ The first model focuses on predicting a precomputed risk score for each building
 
 **Label Engineering**: The label for this model was a precomputed risk score derived from the minimum haversine distance of each location to historical hurricane paths. This metric provides a straightforward way to quantify hurricane risk.
 
-**Second Model (Risk Prediction)**
-
-The second model development aimed to assess risk using a more comprehensive dataset with 223 features. To prevent overfitting and improve predictive accuracy, we implemented a structured feature selection process and defined the **FEMA Risk Score (F_TOTAL)** as the prediction label.
+**Second Model (Risk Prediction)**: The second model development aimed to assess risk using a more comprehensive dataset with 223 features. To prevent overfitting and improve predictive accuracy, we implemented a structured feature selection process and defined the **FEMA Risk Score (F_TOTAL)** as the prediction label.
 
 **Feature Selection Process:**
 1. **Correlation Matrix Analysis**: We calculated the correlation between features and the target variable, identifying the most influential predictors. Highly correlated features were prioritized for inclusion, while redundant or weakly correlated features were removed to avoid overfitting.
