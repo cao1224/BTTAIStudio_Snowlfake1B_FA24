@@ -18,10 +18,14 @@
 Hurricanes, such as Helene and Milton in Florida, have shown how devastating these natural disasters can be for coastal communities. Damaged infrastructure, flooded buildings, and limited access to essential services like healthcare, clean water, and food pose significant challenges during and after hurricanes. Vulnerable populations face long-term consequences, including economic losses, mental health struggles, and prolonged displacement. Social, cultural, economic, and geographic barriers further exacerbate healthcare delivery and access disparities, leaving these communities even more vulnerable.
 
 ## Objectives
-...
+This project aims to address these challenges by developing a model that assesses risk scores based on various factors and create an interactive tool that is easy for health intervention groups and individuals to navigate. This tool will help optimize resource allocation, visualize the communities most in need, and provide actionable insights for disaster preparedness and response.
+
+The tool empowers health groups to proactively allocate resources where they are needed most. It also informs individuals about social determinants and risks specific to their location, enabling better evacuation and preparation decisions. Ultimately, the goal is to equip underrepresented coastal communities with data-driven insights for improved resilience.
 
 ## Goals
-...
+To achieve this, we utilized datasets highlighting social determinants of health, including the Social Vulnerability Index (SVI) and the National Risk Index. These datasets track factors such as income, education, healthcare access, transportation, hurricane paths, and proximity to essential services. By combining social and geographic data, the model identifies key risks and correlations to inform disaster preparedness strategies.
+
+While hurricanes are unavoidable, their impacts can be mitigated by addressing social vulnerabilities before disaster strikes. Our project focuses on reducing post-disaster losses and improving resilience in coastal communities through proactive, informed preparation.
 
 ## Installation
 
@@ -43,10 +47,65 @@ Hurricanes, such as Helene and Milton in Florida, have shown how devastating the
 ...
 
 ## Data Preparation and Validation
-...
+
+### DATASET DESCRIPTION
+Our project utilized a range of datasets to assess and mitigate risks, each providing unique insights and complementary information for understanding vulnerabilities in Florida’s coastal communities.
+
+**FEMA National Risk Index (NRI)**: The NRI dataset assesses risks from 18 natural hazards, including hurricanes, floods, and wildfires, integrating hazard, exposure data, and vulnerability factors. It calculates risk scores and expected annual losses to guide decision-making for disaster preparedness and resilience. The dataset, available in the Snowflake Marketplace (update 1.19.0 as of 3/23/2023) and has been used in our development of the second model, identifying at-risk communities, and helping to prioritize resources.
+
+**CDC Social Vulnerability Index (SVI)**: The SVI highlights socioeconomic and demographic indicators at the census-tract level, helping identify populations most vulnerable to disasters. This dataset is used in both the second model development and the interactive tool, helping to identify areas where intervention is most needed and enabling targeted disaster preparedness.
+
+**Diversity, Equity, and Inclusion – Social Determinants of Health**: This dataset, available in the Snowflake Marketplace, was used for exploratory data analysis. It provided valuable insights into social determinants like income, education, and healthcare access, highlighting disparities that influence disaster impact and recovery.
+
+**Critical Facilities in Florida (Overpass Turbo)**: Using Overpass Turbo, a web-based data mining tool for OpenStreetMap, we sourced location data for critical facilities like hospitals, clinics, and shelters. The data was parsed from JSON and formatted into a CSV for use in the interactive tool, providing information on the geographic distribution of essential services during disasters.
+
+**Hurricane Paths (HURDAT2)**: Historical hurricane path data from the National Hurricane Center was processed from text files into a usable format, including detailed updates every six hours. These data points allowed us to map precise hurricane paths, which were integrated into the interactive tool to visualize historical patterns and inform preparedness.
+
+### EDA (EXPLORATORY DATA ANALYSIS)
+
+
+### FEATURE SELECTION
+
+**First Model (Web-Interactive Tool)**
+
+The first model focuses on predicting a precomputed risk score for each building in Florida, considering its vulnerability to hurricanes. Feature engineering was a key step in ensuring the model captured meaningful patterns in data.
+
+**Features Engineered**:
+1. **Proximity to Coastline**: Using Florida's coastline shapefiles, we calculated the minimum distance from each location to the coast. This metric reflects the likelihood of a building being impacted by storm surges and coastal flooding.
+2. **Historical Hurricane Intersections**: Leveraging historical hurricane path data, we calculated how many times a building’s location intersected with a hurricane path. A buffer radius of 50 kilometers was applied to the hurricane paths to account for the area of impact beyond the path itself. Locations within this buffer were considered intersected.
+3. **Social Vulnerability Index (SVI)**: Each location was assigned the SVI score of its corresponding census tract. This score accounts for socioeconomic factors, such as income and education, that influence a community’s ability to prepare for and recover from disasters.
+
+**Label Engineering**: The label for this model was a precomputed risk score derived from the minimum haversine distance of each location to historical hurricane paths. This metric provides a straightforward way to quantify hurricane risk.
+
+**Second Model (Risk Prediction)**
+
+The second model development aimed to assess risk using a more comprehensive dataset with 223 features. To prevent overfitting and improve predictive accuracy, we implemented a structured feature selection process and defined the **FEMA Risk Score (F_TOTAL)** as the prediction label.
+
+**Feature Selection Process:**
+1. **Correlation Matrix Analysis**: We calculated the correlation between features and the target variable, identifying the most influential predictors. Highly correlated features were prioritized for inclusion, while redundant or weakly correlated features were removed to avoid overfitting.
+2. **Dimensionality Reduction**: Reducing the dimensionality of the dataset ensured the model remained computationally efficient.
+3. **Exhaustive Search for Best Parameter**: An exhaustive search was conducted to identify the optimal parameters for an ensemble regressor. This helped balance the trade-off between model complexity and predictive power.
+
+**Key Features Selected:**
+- **SVI Socioeconomic Status**: Strong relationship (0.679) with the target variable, capturing economic vulnerabilities.
+- **SVI Household Composition and Disability**: Moderate correlationship (0.215), reflecting household-level risks.
+- **Household with No Vehicles**: Correlation of 0.045, representing transportation limitation during evacuations.
+- **Housing Structure with 10+ Units**: Correlations of 0.017 and 0.015, indicating structural vulnerability.
+
+These features collectively accounted for approximately 80% of the total correlation, providing a focused dataset for model training. 
+
+
 
 ## Approach
-...
+### SELECTED MODELS
+For the web-interactive tool, we selected a Random Forest model due to its robustness, particularly when working with datasets derived from geographical and environmental metrics that often include inherent variability. Random Forest is well-suited for handling smaller datasets, typically ranging from a few hundred to thousands of data points, while maintaining strong predictive power. Its ability to handle non-linear relationships and provide accurate predictions made it an ideal choice for this project.
+
+The second focused on aiding healthcare providers and disaster response teams by identifying the most vulnerable regions and offering case-specific solutions. To achieve this, we explained both Random Forest Regressor, Stochastic Gradient Boosting Trees (SGBT) Regressor due to their complementary strengths.
+- **Random Forest Regressor**: Independent and Parallel processing, providing robust and stable predictions, particularly effective for non-linear data relationships.
+- **SGBT Regressor**: Sequential and self-correcting, refining prediction iteratively to minimize errors and improve accuracy.
+
+Both models were trained using supervised learning techniques on datasets such as the Social Vulnerability Index (SVI) and National Risk Index (NRI). Evaluation metrics, including R-squared, Root Mean Squared Error (RMSE), and Mean Error, were used to assess performance and fine-tune parameters. Ensemble learning techniques were applied to extract precise predictions, ensuring the model’s outputs were actionable and reliable.
+
 
 ## Key Findings and Insights
 ...
